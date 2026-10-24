@@ -199,8 +199,8 @@
         <p class="lede">Hospital staff need patient records in seconds, and that same openness is what exposes records to misuse. This capstone prototype decides every request by role, context and risk, grants time-limited emergency access with a written justification, and leaves an audit trail that detects tampering.</p>
         <ul class="results" aria-label="Headline results">
           <li><strong>25 of 25</strong><span>automated tests passing (unit, integration, system, acceptance)</span></li>
-          <li><strong>100%</strong><span>decision accuracy on the labelled validation scenarios</span></li>
-          <li><strong>3.7 ms</strong><span>average decision latency over 300 audited requests</span></li>
+          <li><strong>100%</strong><span>decision accuracy on 36 labelled scenarios, zero false permits</span></li>
+          <li><strong>3.2 ms</strong><span>mean decision latency over 300 audited requests (p99 4.2 ms)</span></li>
         </ul>
         <div class="actions">
           <a class="btn primary" href="files/Taghreed_Almirabi_Capstone_Report.pdf">Read the report (PDF)</a>
@@ -210,7 +210,7 @@
 
       <div class="console" aria-labelledby="console-title">
         <h2 id="console-title">Try an access request</h2>
-        <p class="sub">Runs in your browser and mirrors the rules in <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/blob/main/src/access_control_engine.py">access_control_engine.py</a> (release v1.2.0-unit7). Synthetic users and patients only.</p>
+        <p class="sub">Runs in your browser and mirrors the rules in <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/blob/main/src/access_control_engine.py">access_control_engine.py</a> (release v1.3.0-final). Synthetic users and patients only.</p>
         <div class="presets" role="group" aria-label="Example scenarios">
           <button type="button" data-preset="permit">Assigned physician on duty</button>
           <button type="button" data-preset="mfa">Nurse on an unmanaged device</button>
@@ -292,7 +292,7 @@
         </div>
         <div>
           <h3>Result</h3>
-          <p>A Python 3.12 prototype released in five tagged versions, verified by 25 pytest cases across unit, integration, system and acceptance levels, with 100% decision accuracy on the labelled scenarios, 3.7 ms average latency and about 270 audited requests per second on a laptop. Quality was reviewed against ISO/IEC 25010 and the audit checksum was shown to detect tampering.</p>
+          <p>A Python 3.12 prototype released in six tagged versions, verified by 25 pytest cases across unit, integration, system and acceptance levels, with 100% decision accuracy on 36 labelled scenarios, 3.2 ms mean and 4.2 ms p99 latency and about 312 audited requests per second on a laptop. Two healthcare IT experts rated it 4.85 / 5, quality was reviewed against ISO/IEC 25010, and the audit checksum was shown to detect tampering.</p>
         </div>
       </div>
     </div>
@@ -344,15 +344,17 @@
           <table>
             <thead><tr><th scope="col">Metric</th><th scope="col">Result</th><th scope="col">How it was measured</th></tr></thead>
             <tbody>
-              <tr><td>Decision accuracy</td><td class="num">100.00%</td><td>Engine decisions compared with expected decisions for labelled scenarios</td></tr>
-              <tr><td>Average latency</td><td class="num">3.704 ms</td><td>300 sequential requests after 10 warm-up requests, <code>time.perf_counter</code></td></tr>
-              <tr><td>Throughput</td><td class="num">269.96 req/s</td><td>Same run, each request written to the SQLite audit repository</td></tr>
-              <tr><td>Peak memory</td><td class="num">0.117 MB</td><td><code>tracemalloc</code> during the measured run</td></tr>
+              <tr><td>Decision accuracy</td><td class="num">100.00%</td><td>36 labelled scenarios, six per role, compared with expected decisions; 0 false permits</td></tr>
+              <tr><td>Mean latency</td><td class="num">3.196 ms</td><td>300 sequential requests after 10 warm-up requests, each timed with <code>time.perf_counter</code></td></tr>
+              <tr><td>Median / p95 / p99 latency</td><td class="num">3.131 / 3.976 / 4.205 ms</td><td>Distribution of the 300 timed requests; design target 250 ms</td></tr>
+              <tr><td>Throughput</td><td class="num">312.18 req/s</td><td>Same run, each request written to the SQLite audit repository</td></tr>
+              <tr><td>Peak memory</td><td class="num">0.127 MB</td><td><code>tracemalloc</code> during the measured run</td></tr>
               <tr><td>Interface clarity</td><td class="num">4.60 / 5</td><td>Heuristic review of decision labels, reasons, input consistency and audit traceability</td></tr>
+              <tr><td>Expert validation</td><td class="num">4.85 / 5</td><td>Ten-statement review by two healthcare IT experts; both recommended a pilot</td></tr>
             </tbody>
           </table>
           </div>
-          <p class="muted" style="font-size:14px; margin-top:12px;">Source: <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/blob/main/results/evaluation_results.csv">evaluation_results.csv</a>, produced by <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/blob/main/performance_evaluation.py">performance_evaluation.py</a> on Windows, Python 3.12.15.</p>
+          <p class="muted" style="font-size:14px; margin-top:12px;">Source: <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/blob/main/results/evaluation_results.csv">evaluation_results.csv</a>, produced by <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/blob/main/performance_evaluation.py">performance_evaluation.py</a> on Windows 11, Python 3.12.15, 12 logical CPUs, 7.7 GB (release v1.3.0-final).</p>
         </div>
         <div>
           <h3>Test suite</h3>
@@ -368,7 +370,7 @@
         </div>
       </div>
       <figure>
-        <img src="https://raw.githubusercontent.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/main/results/system_evaluation_chart.png" alt="Four bar charts from the system evaluation: policy decision accuracy 100 percent; average request latency 3.704 milliseconds; throughput 269.96 requests per second; and interface clarity scores of 4 to 5 out of 5 for ease of learning, audit traceability, input consistency, reason explanations and decision labels." loading="lazy" width="2379" height="1577">
+        <img src="https://raw.githubusercontent.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/main/results/system_evaluation_chart.png" alt="Four bar charts from the final evaluation: policy decision accuracy 100 percent on 36 labelled cases; request latency mean 3.20, median 3.13, p95 3.98 and p99 4.20 milliseconds; throughput 312.18 requests per second; and interface clarity scores of 4 to 5 out of 5." loading="lazy" width="2379" height="1577">
         <figcaption>System evaluation chart generated by the evaluation script and committed to <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/tree/main/results">results/</a>.</figcaption>
       </figure>
     </div>
@@ -393,7 +395,7 @@
         </li>
         <li>
           <div><a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework">Source code</a></div>
-          <p>Python 3.12 prototype: policy engine, SQLite audit repository, service layer, demos and tests. Latest tagged release <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/releases/tag/v1.2.0-unit7">v1.2.0-unit7</a> (commit d2ac7cd).</p>
+          <p>Python 3.12 prototype: policy engine, SQLite audit repository, service layer, demos and tests. Latest tagged release <a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/releases/tag/v1.3.0-final">v1.3.0-final</a> (commit 0bb3017).</p>
         </li>
         <li>
           <div><a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/tree/main/docs">Design and operations documents</a></div>
@@ -401,7 +403,7 @@
         </li>
         <li>
           <div><a href="https://github.com/Taghreed-Almirabi/Integrated-EHR-Access-Control-Framework/tree/main/results">Evaluation evidence</a></div>
-          <p>Results CSV, evaluation chart and the complete pytest log for the release.</p>
+          <p>Results CSV, environment record, evaluation chart and the complete pytest log.</p>
         </li>
       </ul>
 
@@ -409,6 +411,7 @@
       <table style="max-width:760px;">
         <thead><tr><th scope="col">Tag</th><th scope="col">Date</th><th scope="col">What it added</th></tr></thead>
         <tbody>
+          <tr><td class="mono">v1.3.0-final</td><td class="num">24 Oct 2026</td><td>Final submission: 36-case benchmark, latency percentiles, environment record, pytest pin aligned</td></tr>
           <tr><td class="mono">v1.2.0-unit7</td><td class="num">17 Oct 2026</td><td>System and acceptance testing, stability run, maintenance plan</td></tr>
           <tr><td class="mono">v1.1.0-unit6</td><td class="num">8 Oct 2026</td><td>Integration evaluation, performance benchmark, deployment plan, Docker packaging</td></tr>
           <tr><td class="mono">v1.0.0</td><td class="num">8 Oct 2026</td><td>First documented release with README</td></tr>
